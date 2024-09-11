@@ -75,7 +75,7 @@ export default function Generate(){
         <Box sx={{mt:4,mb:6,display:'flex',flexDirection:'column',alignItems:'center'}}>
             <Typography variant='h4'>Generate Flashcards</Typography>
             <Paper sx={{p:4,width:'100%'}}>
-                <TextField valie={text} onchange={(e)=>setText(e.target.value)} label='Enter text' fullWidth multiline rows={4} variant='outlined' sx={{mb:2}}></TextField>
+                <TextField value={text} onChange={(e)=>settext(e.target.value)} label='Enter text' fullWidth multiline rows={4} variant='outlined' sx={{mb:2}}></TextField>
                 <Button variant='contained' color='primary' onClick={handlesubmit} fullWidth>
                     {' '}
                     Submit
