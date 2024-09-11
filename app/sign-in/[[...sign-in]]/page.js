@@ -3,9 +3,9 @@ import Link from "next/link";
 import {SignIn} from "@clerk/nextjs";
 import React from "react";
 
-export default function SignUpPage(){
-    return <Container maxWidth='sm'>
-        <AppBar position='static' sx={{backgroundColor:'#3f51b5'}}>
+export default function SignInPage(){
+    return <Container maxWidth='100vw'>
+        <AppBar position='static'>
             <Toolbar>
                 <Typography variant='h6' sx={{flexGrow:1}}>Flashcard SaaS</Typography>
                 <Button color='inherit'>
