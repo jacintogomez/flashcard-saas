@@ -2,6 +2,8 @@
 
 import {useUser} from "@clerk/nextjs";
 import {useRouter} from "next/navigation";
+import {db} from '@/firebase';
+import {doc,collection,setDoc,getDoc,writeBatch} from 'firebase/firestore';
 import {
     Box,
     Button,
