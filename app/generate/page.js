@@ -19,7 +19,7 @@ import {
 import {useState} from "react";
 
 export default function Generate(){
-    const {isloaded,issignedin,user}=useUser();
+    const {isLoaded,isSignedIn,user}=useUser();
     const [flashcards,setflashcards]=useState([]);
     const [flipped,setflipped]=useState([]);
     const [text,settext]=useState('');
@@ -47,6 +47,15 @@ export default function Generate(){
         if(!name){
             alert('Please enter a name');
             return;
+        }else if(!isSignedIn){
+            alert('Must be signed in to save');
+            return;
+        }else if(!isLoaded){
+            alert('Not yet loaded');
+            return;
+        }else if(!user){
+            alert('No target user');
+            return;
         }
         const batch=writeBatch(db);
         const userdocref=doc(collection(db,'users'),user.id);
@@ -66,7 +75,7 @@ export default function Generate(){
         const colref=collection(userdocref,name);
         flashcards.forEach((flashcard)=>{
             const carddocref=doc(colref);
-            batch.set(carddocref,flahcard);
+            batch.set(carddocref,flashcard);
         });
         await batch.commit();
         handleclose();

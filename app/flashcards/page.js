@@ -7,7 +7,7 @@ import {useRouter} from 'next/navigation';
 import {Card, CardActionArea, CardContent, Container, Grid, Typography} from "@mui/material";
 
 export default function Flashcards(){
-    const {isloaded,issignedin,user}=useUser();
+    const {isLoaded,isSignedIn,user}=useUser();
     const [flashcards,setflashcards]=useState([]);
     const router=useRouter();
     useEffect(()=>{
@@ -25,9 +25,9 @@ export default function Flashcards(){
         getflashcards();
     },[user]);
 
-    if(!isloaded||!issignedin){return <></>}
+    if(!isLoaded||!isSignedIn){return <Typography variant='h6'>Nothing to see here</Typography>}
     const handlecardclick=(id)=>{
-        router.push(`/flashcards?id=${id}`);
+        router.push(`/flashcard?id=${id}`);
     };
 
     return(
@@ -36,7 +36,7 @@ export default function Flashcards(){
                 {flashcards.map((flashcard,index)=>(
                     <Grid item xs={12} sm={6} md={4} key={index}>
                         <Card>
-                            <CardActionArea onClick={()=>{handlecardclick(id)}}>
+                            <CardActionArea onClick={()=>{handlecardclick(flashcard.name)}}>
                                 <CardContent>
                                     <Typography variant='h6'>{flashcard.name}</Typography>
                                 </CardContent>
