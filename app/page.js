@@ -1,12 +1,31 @@
-import Image from "next/image";
-import getstripe from '@/utils/get-stripe.js';
+'use client';
+import getStripe from '@/utils/get-stripe';
 import {SignedIn,SignedOut,UserButton} from '@clerk/nextjs';
 import {AppBar, Box, Button, Container, Grid, Toolbar, Typography} from "@mui/material";
 import Head from "next/head";
 import React from "react";
 
 export default function Home() {
-  return (
+    const handlesubmit=async ()=>{
+        const checkoutsession=await fetch('/api/checkout_session',{
+            method:'POST',
+            headers:{
+                origin:'http://localhost:3000',
+            },
+        });
+        const checkoutsessionjson=await checkoutsession.json();
+        if(checkoutsession.statusCode===500){
+            console.error(checkoutsession.message);
+            return;
+        }
+        const stripe=await getStripe();
+        const {error}=await stripe.redirectToCheckout({
+            sessionId:checkoutsessionjson.id,
+        });
+        if(error){console.warn(error.message);}
+    }
+
+    return (
     <Container maxWidth='100vw'>
       <Head>
         <title>Flashcard SaaS</title>
@@ -74,7 +93,7 @@ export default function Home() {
                         Access to basic flashcard features and limited storage
                     </Typography>
                     <Button variant='contained' color='primary' sx={{mt:2}}>
-                        Choose basic
+                        Choose Basic
                     </Button>
                 </Box>
             </Grid>
@@ -86,8 +105,8 @@ export default function Home() {
                         {' '}
                         Unlimited flashcards and storage with priority support.
                     </Typography>
-                    <Button variant='contained' color='primary' sx={{mt:2}}>
-                        Choose basic
+                    <Button variant='contained' color='primary' sx={{mt:2}} onClick={handlesubmit}>
+                        Choose Pro
                     </Button>
                 </Box>
             </Grid>

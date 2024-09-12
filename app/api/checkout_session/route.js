@@ -5,9 +5,21 @@ const formatamountforstripe=(amount)=>{
     return Math.round(amount*100);
 }
 
+export async function GET(req,{params}){
+    const searchparams=req.nextUrl.searchParams;
+    const sessionid=searchparams.get('session_id');
+    try{
+        const checkoutsession=await stripe.checkout.sessions.retrieve(sessionid);
+        return NextResponse.json(checkoutsession);
+    }catch(error){
+        console.error('Error retrieving checkout session',error);
+        return NextResponse.json({error:{message:error.message}},{status:500});
+    }
+}
+
 export async function POST(req){
     const params = {
-        submit_type: 'subscription',
+        mode: 'subscription',
         payment_method_types: ['card'],
         line_items: [
             {
@@ -20,12 +32,13 @@ export async function POST(req){
                     recurring:{
                         interval:'month',
                         interval_count:1
-                    }
-                }
+                    },
+                },
+                quantity: 1,
             },
         ],
-        success_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${req.headers.origin}/result?session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${req.headers.get('origin',)}/result?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${req.headers.get('origin',)}/result?session_id={CHECKOUT_SESSION_ID}`,
     };
     const checkoutSession =await stripe.checkout.sessions.create(params);
     return NextResponse.json(checkoutSession,{
