@@ -4,8 +4,10 @@ import {SignedIn,SignedOut,UserButton} from '@clerk/nextjs';
 import {AppBar, Box, Button, Container, Grid, Toolbar, Typography} from "@mui/material";
 import Head from "next/head";
 import React from "react";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
+    const router=useRouter();
     const handlesubmit=async ()=>{
         const checkoutsession=await fetch('/api/checkout_session',{
             method:'POST',
@@ -34,7 +36,7 @@ export default function Home() {
 
       <AppBar position='static'>
         <Toolbar>
-          <Typography variant='h6' style={{flexGrow:1}}>Flashcard Saas</Typography>
+          <Typography variant='h6' style={{flexGrow:1}}>Flashcard SaaS</Typography>
           <SignedOut>
             <Button color='inherit' href='/sign-in'>Login</Button>
             <Button color='inherit' href='/sign-up'>Sign Up</Button>
@@ -48,36 +50,48 @@ export default function Home() {
           <Typography variant='h2' gutterBottom>Welcome to Flashcard SaaS</Typography>
           <Typography variant='h5' gutterBottom>
               {' '}
-              Easiest way to make flashcards from text
+              Use AI to quickly and easily generate flashcards for your topic
           </Typography>
-          <Button variant='contained' color='primary' sx={{mt:2}}>Get started</Button>
+          <SignedOut>
+            <Button variant='contained' color='primary' sx={{mt:2}} onClick={()=>router.push('/sign-up')}>Get started</Button>
+          </SignedOut>
+          <SignedIn>
+              <Button variant='contained' color='primary' sx={{mt:2,mr:1,ml:1}} onClick={()=>router.push('/flashcards')}>My Cards</Button>
+              <Button variant='contained' color='primary' sx={{mt:2,mr:1,ml:1}} onClick={()=>router.push('/generate')}>Generate New</Button>
+          </SignedIn>
       </Box>
 
-    <Box sx={{my:6}}>
+    <Box sx={{my:6}} textAlign='center'>
         <Typography variant='h4' gutterBottom>
             Features
         </Typography>
         <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-                <Typography variant='h6' gutterBottom>Easy text input</Typography>
-                <Typography>
-                    {' '}
-                    Simply input your text and let our software do the rest.
-                </Typography>
+                <Box sx={{p:3,border:'1px solid',borderColor:'grey.300',borderRadius:2}}>
+                    <Typography variant='h6' gutterBottom>Easy text input</Typography>
+                    <Typography>
+                        {' '}
+                        Simply input your text and let our software do the rest.
+                    </Typography>
+                </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-                <Typography variant='h6' gutterBottom>Smart flashcards</Typography>
-                <Typography>
-                    {' '}
-                    Our AI intelligently breaks down your text into flashcard material.
-                </Typography>
+                <Box sx={{p:3,border:'1px solid',borderColor:'grey.300',borderRadius:2}}>
+                    <Typography variant='h6' gutterBottom>Smart flashcards</Typography>
+                    <Typography>
+                        {' '}
+                        Our AI intelligently breaks down your text into flashcard material.
+                    </Typography>
+                </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-                <Typography variant='h6' gutterBottom>Accessible Anywhere</Typography>
-                <Typography>
-                    {' '}
-                    Access your flashcards from any device.
-                </Typography>
+                <Box sx={{p:3,border:'1px solid',borderColor:'grey.300',borderRadius:2}}>
+                    <Typography variant='h6' gutterBottom>Accessible Anywhere</Typography>
+                    <Typography>
+                        {' '}
+                        Access your flashcards from any device.
+                    </Typography>
+                </Box>
             </Grid>
         </Grid>
     </Box>
